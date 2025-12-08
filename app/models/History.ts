@@ -11,4 +11,6 @@ const HistorySchema = new Schema(
   { timestamps: true }
 );
 
-export const History = models.History || mongoose.model("History", HistorySchema);
+// ✔ Correct export (NO DEFAULT EXPORT!)
+export const History =
+  models.History || mongoose.model("History", HistorySchema);
