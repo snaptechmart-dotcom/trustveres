@@ -3,11 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 
-// ✔ Correct export (Vercel requires this)
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
 
       credentials: {
         email: { label: "Email", type: "email" },
@@ -24,7 +23,7 @@ export const authOptions = {
         if (!isValid) return null;
 
         return {
-          id: user._id.toString(),
+          id: user._id,
           name: user.name,
           email: user.email,
         };
@@ -36,6 +35,7 @@ export const authOptions = {
   pages: { signIn: "/login" },
 };
 
-// ✔ REQUIRED BY NEXT.JS 15 — EXPORT HANDLER AS GET & POST
+// ⭐ Next.js Route Handler — ONLY THESE EXPORTS ALLOWED
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
