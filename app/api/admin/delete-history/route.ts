@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongodb";
-import History from "@/app/models/History";
+import { History } from "@/app/models/History"; // ✔ Correct import
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     const { id } = await req.json();
 
-    const deleted = await History.findByIdAndDelete(id);
+    const deleted = await History.findByIdAndDelete(id); // ✔ Now works
 
     if (!deleted) {
       return NextResponse.json({ success: false, message: "Not found" });
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ success: false, error: err.message });
+    console.error("DELETE ERROR:", err);
+    return NextResponse.json({ success: false });
   }
 }

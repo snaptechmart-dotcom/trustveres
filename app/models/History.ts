@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 const HistorySchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true },
-    input: String,
-    output: String,
-    createdAt: { type: Date, default: Date.now },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    name: String,
+    info: String,
+    score: Number,
+    analysis: String,
   },
   { timestamps: true }
 );
 
-export default mongoose.models.History || mongoose.model("History", HistorySchema);
+export const History =
+  mongoose.models.History || mongoose.model("History", HistorySchema);
