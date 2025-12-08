@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/app/lib/mongodb";
+import { connectDB } from "@/app/lib/mongodb";
 import History from "@/app/models/History"; 
 import User from "@/app/models/User";
 import jwt from "jsonwebtoken";

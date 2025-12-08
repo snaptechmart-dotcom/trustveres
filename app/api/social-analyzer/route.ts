@@ -1,6 +1,6 @@
 // app/api/social-analyzer/route.ts
 import { NextResponse } from "next/server";
-import connectDB from "@/app/lib/mongodb";
+import { connectDB } from "@/app/lib/mongodb";
 import History from "@/app/models/History";
 import jwt from "jsonwebtoken";
 
