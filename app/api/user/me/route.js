@@ -1,8 +1,7 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import dbConnect from "@/app/lib/dbConnect";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";  // FIXED IMPORT
+import { connectDB } from "@/app/lib/mongodb";                      // FIXED DB IMPORT
 import User from "@/app/models/User";
-
 
 export async function GET() {
   try {
@@ -12,7 +11,7 @@ export async function GET() {
       return Response.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    await dbConnect();
+    await connectDB();
 
     const user = await User.findById(session.user.id).lean();
 
