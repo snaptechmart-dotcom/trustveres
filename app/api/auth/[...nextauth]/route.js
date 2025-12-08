@@ -6,7 +6,7 @@ import User from "@/app/models/User";
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -29,11 +29,12 @@ export const authOptions = {
       },
     }),
   ],
+
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
 };
 
+// ✔ NextAuth handler MUST be exported as GET and POST (ONLY these two)
 const handler = NextAuth(authOptions);
 
-// ❗ Next.js expects GET and POST exports only
 export { handler as GET, handler as POST };
