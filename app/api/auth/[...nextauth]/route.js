@@ -1,8 +1,8 @@
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 
-// NextAuth configuration extracted so route handler only exports HTTP methods
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -27,3 +27,15 @@ export const authOptions = {
           name: user.name,
           email: user.email,
         };
+      },
+    }),
+  ],
+
+  session: { strategy: "jwt" },
+  pages: { signIn: "/login" },
+};
+
+// ✔ ONLY these two exports allowed — nothing else!
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
