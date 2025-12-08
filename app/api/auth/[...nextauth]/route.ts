@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 
-export const authOptions = {
+const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -34,7 +34,7 @@ export const authOptions = {
   pages: { signIn: "/login" },
 };
 
-// ✔️ Correct App Router export — exactly what Vercel needs
+// ⭐ ROUTE EXPORTS (only allowed exports)
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
