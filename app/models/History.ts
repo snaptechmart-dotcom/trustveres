@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
-const HistorySchema = new mongoose.Schema(
+const HistorySchema = new Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: String,
     info: String,
     score: Number,
@@ -11,5 +11,5 @@ const HistorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const History =
-  mongoose.models.History || mongoose.model("History", HistorySchema);
+// This ensures model is created only once
+export const History = models.History || mongoose.model("History", HistorySchema);
