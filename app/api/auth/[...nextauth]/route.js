@@ -9,8 +9,9 @@ const authOptions = {
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials) {
         await connectDB();
 
@@ -25,17 +26,13 @@ const authOptions = {
           name: user.name,
           email: user.email,
         };
-      }
-    })
+      },
+    }),
   ],
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login"
-  }
+
+  session: { strategy: "jwt" },
+  pages: { signIn: "/login" },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
