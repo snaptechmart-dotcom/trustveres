@@ -34,7 +34,7 @@ export const authOptions = {
   pages: { signIn: "/login" },
 };
 
-// ✔ NextAuth handler MUST be exported as GET and POST (ONLY these two)
+// 🚀 NEXTAUTH HANDLER (CORRECT EXPORT FORMAT FOR APP ROUTER)
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
