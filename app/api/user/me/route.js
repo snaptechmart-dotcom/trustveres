@@ -1,39 +1,59 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { getServerSession } from "next-auth";
 import { connectDB } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 
-export const authOptions = {
+// ⭐ Yeh BADAL DIYA: Ab hum authOptions ko import nahi karte
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+// ⭐ Local authOptions banaya so this route does NOT import a route file
+const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
-
-      async authorize(credentials) {
-        await connectDB();
-
-        const user = await User.findOne({ email: credentials.email });
-        if (!user) return null;
-
-        const isValid = credentials.password === user.password;
-        if (!isValid) return null;
-
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-        };
-      },
-    }),
+      async authorize() {
+        return null;
+      }
+    })
   ],
-
-  session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
+  session: { strategy: "jwt" }
 };
 
-const handler = NextAuth(authOptions);
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
 
-export { handler as GET, handler as POST };
+    if (!session || !session.user?.id) {
+      return Response.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const user = await User.findById(session.user.id).lean();
+
+    if (!user) {
+      return Response.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return Response.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      plan: user.plan,
+      planValidTill: user.planValidTill,
+      trustChecksUsed: user.trustChecksUsed,
+      reportsUsed: user.reportsUsed,
+      subscriptionId: user.subscriptionId,
+      subscriptionStatus: user.subscriptionStatus,
+      lastPaymentId: user.lastPaymentId,
+    });
+
+  } catch (err) {
+    console.error("USER ME API ERROR:", err);
+    return Response.json({ error: "Server error" }, { status: 500 });
+  }
+}
