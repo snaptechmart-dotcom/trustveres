@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongodb";
-import History from "@/app/models/History";
+import { History } from "@/app/models/History";
 
 export async function GET() {
   try {
     await connectDB();
 
-    // Fetch all history records sorted by latest
-    const items = await History.find().sort({ createdAt: -1 });
+    const allHistory = await History.find().lean();
 
-    return NextResponse.json({ items });
+    return NextResponse.json(allHistory);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Server error while loading history" },
-      { status: 500 }
-    );
+    console.error("History Fetch Error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
