@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/app/lib/mongodb";
+import connectDB from "@/app/lib/mongodb";
 import History from "@/app/models/History";
 
 export async function POST(req: Request) {
   try {
     await connectDB();
 
-    const body = await req.json();
-    const { id } = body;
-
+    const { id } = await req.json();
     if (!id) {
-      return NextResponse.json({ error: "History ID required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "ID is required" },
+        { status: 400 }
+      );
     }
 
-    await History.findByIdAndDelete(id);
+    const deleted = await History.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, message: "Record not found" },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("delete-history error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  } catch (error) {
+    console.error("❌ DELETE HISTORY ERROR:", error);
+    return NextResponse.json(
+      { success: false, message: "Server error" },
+      { status: 500 }
+    );
   }
 }

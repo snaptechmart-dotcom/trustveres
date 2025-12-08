@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // Track connection state
+let isConnected = false;
 
 export async function connectDB() {
-  if (isConnected) {
-    return;
-  }
+  if (isConnected) return;
 
   if (!process.env.MONGODB_URI) {
     throw new Error("❌ MONGODB_URI is missing in environment variables");
@@ -23,3 +21,6 @@ export async function connectDB() {
     throw new Error("Database connection failed");
   }
 }
+
+// ⭐ ADD THIS LINE ↓↓↓
+export default connectDB;
