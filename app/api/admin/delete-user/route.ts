@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
-import { History } from "@/app/models/History"; // ✔ FIXED IMPORT
+import { History } from "@/app/models/History";
 
 export async function POST(req: Request) {
   try {
@@ -16,17 +16,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Delete user
-    const deletedUser = await User.findByIdAndDelete(id);
+    // ⭐ FIX: Remove findByIdAndDelete (CAUSES TS ERROR)
+    const deletedUser = await User.deleteOne({ _id: id });
 
-    if (!deletedUser) {
+    if (!deletedUser || deletedUser.deletedCount === 0) {
       return NextResponse.json(
         { success: false, message: "User not found" },
         { status: 404 }
       );
     }
 
-    // Also delete all history of this user
+    // ⭐ Delete all history for this user
     await History.deleteMany({ userId: id });
 
     return NextResponse.json({ success: true });
