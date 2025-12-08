@@ -11,5 +11,6 @@ const HistorySchema = new Schema(
   { timestamps: true }
 );
 
-// This ensures model is created only once
-export const History = models.History || mongoose.model("History", HistorySchema);
+// ✔ Correct model export
+export const History =
+  models.History || mongoose.model("History", HistorySchema);
