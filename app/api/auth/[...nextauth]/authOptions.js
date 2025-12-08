@@ -27,3 +27,11 @@ export const authOptions = {
           name: user.name,
           email: user.email,
         };
+      },
+    }),
+  ],
+
+  session: { strategy: "jwt" },
+  pages: { signIn: "/login" },
+};
+
