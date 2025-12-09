@@ -6,7 +6,6 @@ export async function GET() {
   try {
     await connectDB();
 
-    // Chart के लिए सकोर की जानकारी
     const chartData = await History.find({})
       .select("score createdAt")
       .sort({ createdAt: 1 })

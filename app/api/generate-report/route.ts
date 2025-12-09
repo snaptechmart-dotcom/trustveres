@@ -6,7 +6,6 @@ export async function GET() {
   try {
     await connectDB();
 
-    // रिपोर्ट के लिए पूरी history लाओ
     const allHistory = await History.find({}).lean();
 
     return NextResponse.json({
